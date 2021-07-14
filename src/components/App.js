@@ -5,11 +5,24 @@ import NavBar from './NavBar';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import initialData from '../initialData';
 import uniqueid from 'uniqueid'
+import Fetching from './Fetching'
 
 class App extends React.Component {
 
     state = {
-        tasks:initialData
+        tasks:[],
+        fetching: true
+    }
+
+    componentDidMount = () => {
+        let delay = Math.floor(Math.random() * 5000)
+
+        setTimeout(()=>{
+            this.setState({
+                fetching: false,
+                tasks:initialData
+            })
+        }, delay)
     }
 
     onToggleCompleted = (taskId) => {
@@ -47,6 +60,7 @@ class App extends React.Component {
     render(){
       return(
         <section id="todo">
+            {this.state.fetching? <Fetching/> : null }
             <BrowserRouter>
                 <Switch>
                     <Route path="/add-task" render={(props) =><AddTask {...props} onAddTask = {this.onAddTask}/>}></Route>
